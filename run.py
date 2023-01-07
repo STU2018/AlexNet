@@ -1,6 +1,5 @@
 import torch
 import torch.optim as optim
-from torch.optim import lr_scheduler
 import os
 
 from net import AlexNet
@@ -15,9 +14,8 @@ if __name__ == '__main__':
     model = model.to(device)
 
     optimizer = optim.Adam(model.parameters(), lr=0.001)
-    lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)
 
-    epochs = 30
+    epochs = 100
     train_loader, val_loader = get_dataloader()
 
     best_val_acc = 0.0
