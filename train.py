@@ -16,14 +16,9 @@ def train_runner(model, device, train_loader, optimizer, epoch):
         train_loss += loss.item()
         total += labels.size(0)
 
-        predict = outputs.argmax(dim=1)
-
-        correct += (predict == labels).sum().item()
-
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
 
-    print("Train Epoch {}, train-loss: {:.4f}, train-acc: {:.2f}%".format(epoch, train_loss/batch_num, 100.0 * (correct / total)))
+    print("Train Epoch {} done".format(epoch))
 
-    return correct / total

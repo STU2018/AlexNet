@@ -1,9 +1,10 @@
 import torch
 import torch.optim as optim
+from torch.optim import lr_scheduler
 import os
 
 from net import AlexNet
-from test import test_runner
+from val import val_runner
 from train import train_runner
 from dataloader import get_dataloader
 
@@ -14,20 +15,19 @@ if __name__ == '__main__':
     model = model.to(device)
 
     optimizer = optim.Adam(model.parameters(), lr=0.001)
-    epochs = 20
-    train_loader, test_loader = get_dataloader()
+    lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)
 
-    best_train_acc = 0.0
+    epochs = 30
+    train_loader, val_loader = get_dataloader()
+
+    best_val_acc = 0.0
     print('start to train model')
     for epoch in range(1, epochs + 1):
-        train_acc = train_runner(model, device, train_loader, optimizer, epoch)
-        if best_train_acc < train_acc:
-            best_train_acc = train_acc
+        train_runner(model, device, train_loader, optimizer, epoch)
+        val_acc = val_runner(model, device, val_loader)
+        if best_val_acc < val_acc:
+            best_val_acc = val_acc
             if os.path.exists('save') == False:
                 os.mkdir('save')
-            torch.save(model, './model/alexnet-model.pth')
+            torch.save(model, './save/alexnet-model.pth')
     print('train done')
-
-    print('start to test model')
-    test_runner(model, device, test_loader)
-    print('test done')

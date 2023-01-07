@@ -37,7 +37,7 @@ def get_dataloader():
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
         ])
     )
-    test_data = MyDataset(
+    val_data = MyDataset(
         txt_path='./data/catVSdog/test.txt',
         transform=transforms.Compose([
             transforms.Resize((227, 227)),
@@ -46,7 +46,9 @@ def get_dataloader():
         ])
     )
 
-    train_loader = torch.utils.data.DataLoader(dataset=train_data, batch_size=64, shuffle=False)
-    test_loader = torch.utils.data.DataLoader(dataset=test_data, batch_size=32, shuffle=False)
+    # if shuffle=False,get high train-acc at first
+    # if batch_size to large, val-acc maintain 0.5
+    train_loader = torch.utils.data.DataLoader(dataset=train_data, batch_size=64, shuffle=True)
+    val_loader = torch.utils.data.DataLoader(dataset=val_data, batch_size=32, shuffle=False)
 
-    return train_loader, test_loader
+    return train_loader, val_loader

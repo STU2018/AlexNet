@@ -2,12 +2,13 @@ import torch
 import torch.nn.functional as F
 
 
-def test_runner(model, device, test_loader):
+def val_runner(model, device, test_loader):
     model.eval()
 
     correct, test_loss, total = 0.0, 0.0, 0
     with torch.no_grad():
-        for batch_index, (images, labels) in test_loader:
+        # fixed bug: when not use enumerate, val-acc would maintain 0.5 or grow slowly
+        for batch_index, (images, labels) in enumerate(test_loader):
             images, labels = images.to(device), labels.to(device)
 
             outputs = model(images)
@@ -16,4 +17,6 @@ def test_runner(model, device, test_loader):
             predict = outputs.argmax(dim=1)
             total += labels.size(0)
             correct += (predict == labels).sum().item()
-    print("test-acc: {:.2f}%".format(100.0 * (correct / total)))
+
+    print("val-acc: {:.2f}%".format(100.0 * (correct / total)))
+    return correct / total
