@@ -33,7 +33,7 @@ torchvision==0.7.0
 
 
 
-# How to run
+# Usage
 
 ### Prepare data
 
@@ -82,3 +82,10 @@ test on your own images
 ```
 python test_on_own_pictures.py
 ```
+
+# Reference
+
+[Zhihu 李大熊] : 手撕 CNN 之 AlexNet (PyTorch 实战篇) [link](https://zhuanlan.zhihu.com/p/495615011) 
+
+
+
